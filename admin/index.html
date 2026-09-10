@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>관리자 · 수시 면접전형 준비</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script>document.documentElement.classList.add('gate-lock')</script>
+<style>html.gate-lock body{visibility:hidden}</style>
+</head>
+<body data-role="admin" data-gate="admin">
+
+<nav class="nav">
+  <div class="wrap">
+    <span class="brand">관리자 응답 현황</span>
+    <a class="back" href="../index.html">← 전체 목록</a>
+  </div>
+</nav>
+
+<header class="hero" style="padding:48px 0 20px;">
+  <div class="wrap">
+    <div class="eyebrow">3학년 3반 담임 전용</div>
+    <h1 style="font-size:clamp(24px,4vw,36px);">전체 응답 한눈에 보기</h1>
+    <p>학생들이 제출한 내용이 모이는 구글 시트를 그대로 불러온 화면입니다.<br>슬라이더로 축소하면 더 많은 열을 한 번에 볼 수 있어요.</p>
+  </div>
+</header>
+
+<main class="section">
+  <div class="wrap">
+
+    <div class="notice">
+      🔒 이 페이지에는 학생 전체의 응답이 그대로 표시됩니다. 학생용 비밀번호와는 다른
+      별도의 관리자 비밀번호로 잠겨 있지만, 이는 검색 노출·우연한 접근을 막는 가벼운
+      수준의 보호이며 진짜 서버 보안은 아닙니다. 이 페이지 주소와 관리자 비밀번호는
+      절대 학생에게 알려주지 마세요.
+    </div>
+
+    <div class="sheet-toolbar">
+      <div class="zoom-control">
+        축소/확대
+        <input type="range" id="zoom-range" min="40" max="100" value="70">
+        <span id="zoom-label">70%</span>
+      </div>
+      <a class="btn btn-ghost btn-sm" id="open-new" href="#" target="_blank" rel="noopener">새 창에서 원본 열기 ↗</a>
+    </div>
+
+    <div class="sheet-frame-wrap" id="sheet-frame-wrap">
+      <iframe id="sheet-frame" src="" loading="lazy"></iframe>
+    </div>
+
+    <p class="section-sub" style="margin-top:14px;">
+      화면이 비어 있다면 <code>assets/config.js</code>의 <code>adminSheetEmbedUrl</code>에
+      구글 시트 링크를 아직 넣지 않은 것입니다. README.md의 안내를 참고하세요.
+    </p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">관리자: 차윤정 (3학년 3반 담임)</div>
+</footer>
+
+<script src="../assets/config.js"></script>
+<script src="../assets/gate.js"></script>
+<script src="../assets/app.js"></script>
+<script>
+  document.getElementById("open-new").href = SITE_CONFIG.adminSheetEmbedUrl || "#";
+</script>
+</body>
+</html>

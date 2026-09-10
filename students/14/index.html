@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>이소정 · 수시 면접전형 준비</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>document.documentElement.classList.add('gate-lock')</script>
+<style>html.gate-lock body{visibility:hidden}</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <span class="brand" id="student-label">3학년 3반 14번 이소정</span>
+    <a class="back" href="../../index.html">← 전체 목록</a>
+  </div>
+</nav>
+
+<header class="hero" style="padding:56px 0 28px;">
+  <div class="wrap">
+    <div class="eyebrow">수시 면접전형 준비</div>
+    <h1 style="font-size:clamp(26px,4vw,40px);">이소정님의 준비 노트</h1>
+    <p>아래 내용을 채우고 맨 아래 제출 버튼을 누르면 선생님께 바로 전달됩니다.<br>언제든 다시 들어와 이어서 작성할 수 있어요.</p>
+  </div>
+</header>
+
+<main class="section">
+  <div class="wrap" style="max-width:760px;">
+
+    <div class="notice">
+      ⚠️ 여기 정리한 내용은 면접 준비용 초안입니다. 대학별 지원자격·전형방법·수능최저는 매년 바뀌므로,
+      실제 지원 전 반드시 해당 연도 모집요강 원문과 대학 입학처 공지로 다시 확인하세요.
+    </div>
+
+    <form id="student-form">
+
+      <!-- A. 자기소개 & 컨셉 -->
+      <section class="panel">
+        <h2>1. 자기소개 &amp; 나만의 컨셉</h2>
+        <p class="hint">두괄식으로, 통암기보다는 키워드 중심으로 구조만 잡아보세요.</p>
+
+        <div class="field">
+          <label>나만의 컨셉 키워드 (2~3개)</label>
+          <input type="text" id="f-concept" placeholder="예: 사용자중심 / 손끝의 디테일 / 꾸준한 기록">
+        </div>
+
+        <div class="field">
+          <label>1분 자기소개 스크립트</label>
+          <textarea id="f-intro" placeholder="결론 먼저 → 근거 → 배운 점 순서로 작성"></textarea>
+        </div>
+
+        <div class="field">
+          <label>지원동기 (공통)</label>
+          <textarea id="f-motivation" placeholder="여러 대학에 공통으로 적용되는 지원동기"></textarea>
+        </div>
+
+        <div class="field">
+          <label>진로 계획 (입학 후 4년)</label>
+          <textarea id="f-career"></textarea>
+        </div>
+
+        <div class="field">
+          <label>특성화고를 선택한 이유 / 특성화고 활동에서 배운 점</label>
+          <textarea id="f-why-specialized"></textarea>
+        </div>
+
+        <div class="field" style="margin-bottom:0">
+          <label>최근 관심 있는 디자인·미술 이슈 또는 작가</label>
+          <textarea id="f-interest"></textarea>
+        </div>
+      </section>
+
+      <!-- B. 지원 대학 조사 -->
+      <section class="panel">
+        <h2>2. 지원 대학 조사 (수시 6장 카드)</h2>
+        <p class="hint">대학 홈페이지·학과 홈페이지에서 인재상, 커리큘럼, 교수님 전공을 찾아 채워보세요. 6개 다 채우지 않아도 저장됩니다.</p>
+
+        <div class="uni-block">
+          <span class="uni-num">카드 1</span>
+          <div class="uni-grid">
+            <div class="field"><label>대학명</label><input type="text" id="uni-name-1"></div>
+            <div class="field"><label>학과(모집단위)</label><input type="text" id="uni-dept-1"></div>
+          </div>
+          <div class="field"><label>학과 인재상<span class="sub">대학·학과 홈페이지에서 조사</span></label><textarea id="uni-ideal-1"></textarea></div>
+          <div class="field"><label>커리큘럼 특징</label><textarea id="uni-curri-1"></textarea></div>
+          <div class="field"><label>교수님 전공·특색 (대표 교수 2~3인)</label><textarea id="uni-prof-1"></textarea></div>
+          <div class="field" style="margin-bottom:0"><label>이 학과에 끌리는 이유</label><textarea id="uni-why-1"></textarea></div>
+        </div>
+        <div class="uni-block">
+          <span class="uni-num">카드 2</span>
+          <div class="uni-grid">
+            <div class="field"><label>대학명</label><input type="text" id="uni-name-2"></div>
+            <div class="field"><label>학과(모집단위)</label><input type="text" id="uni-dept-2"></div>
+          </div>
+          <div class="field"><label>학과 인재상<span class="sub">대학·학과 홈페이지에서 조사</span></label><textarea id="uni-ideal-2"></textarea></div>
+          <div class="field"><label>커리큘럼 특징</label><textarea id="uni-curri-2"></textarea></div>
+          <div class="field"><label>교수님 전공·특색 (대표 교수 2~3인)</label><textarea id="uni-prof-2"></textarea></div>
+          <div class="field" style="margin-bottom:0"><label>이 학과에 끌리는 이유</label><textarea id="uni-why-2"></textarea></div>
+        </div>
+        <div class="uni-block">
+          <span class="uni-num">카드 3</span>
+          <div class="uni-grid">
+            <div class="field"><label>대학명</label><input type="text" id="uni-name-3"></div>
+            <div class="field"><label>학과(모집단위)</label><input type="text" id="uni-dept-3"></div>
+          </div>
+          <div class="field"><label>학과 인재상<span class="sub">대학·학과 홈페이지에서 조사</span></label><textarea id="uni-ideal-3"></textarea></div>
+          <div class="field"><label>커리큘럼 특징</label><textarea id="uni-curri-3"></textarea></div>
+          <div class="field"><label>교수님 전공·특색 (대표 교수 2~3인)</label><textarea id="uni-prof-3"></textarea></div>
+          <div class="field" style="margin-bottom:0"><label>이 학과에 끌리는 이유</label><textarea id="uni-why-3"></textarea></div>
+        </div>
+        <div class="uni-block">
+          <span class="uni-num">카드 4</span>
+          <div class="uni-grid">
+            <div class="field"><label>대학명</label><input type="text" id="uni-name-4"></div>
+            <div class="field"><label>학과(모집단위)</label><input type="text" id="uni-dept-4"></div>
+          </div>
+          <div class="field"><label>학과 인재상<span class="sub">대학·학과 홈페이지에서 조사</span></label><textarea id="uni-ideal-4"></textarea></div>
+          <div class="field"><label>커리큘럼 특징</label><textarea id="uni-curri-4"></textarea></div>
+          <div class="field"><label>교수님 전공·특색 (대표 교수 2~3인)</label><textarea id="uni-prof-4"></textarea></div>
+          <div class="field" style="margin-bottom:0"><label>이 학과에 끌리는 이유</label><textarea id="uni-why-4"></textarea></div>
+        </div>
+        <div class="uni-block">
+          <span class="uni-num">카드 5</span>
+          <div class="uni-grid">
+            <div class="field"><label>대학명</label><input type="text" id="uni-name-5"></div>
+            <div class="field"><label>학과(모집단위)</label><input type="text" id="uni-dept-5"></div>
+          </div>
+          <div class="field"><label>학과 인재상<span class="sub">대학·학과 홈페이지에서 조사</span></label><textarea id="uni-ideal-5"></textarea></div>
+          <div class="field"><label>커리큘럼 특징</label><textarea id="uni-curri-5"></textarea></div>
+          <div class="field"><label>교수님 전공·특색 (대표 교수 2~3인)</label><textarea id="uni-prof-5"></textarea></div>
+          <div class="field" style="margin-bottom:0"><label>이 학과에 끌리는 이유</label><textarea id="uni-why-5"></textarea></div>
+        </div>
+        <div class="uni-block">
+          <span class="uni-num">카드 6</span>
+          <div class="uni-grid">
+            <div class="field"><label>대학명</label><input type="text" id="uni-name-6"></div>
+            <div class="field"><label>학과(모집단위)</label><input type="text" id="uni-dept-6"></div>
+          </div>
+          <div class="field"><label>학과 인재상<span class="sub">대학·학과 홈페이지에서 조사</span></label><textarea id="uni-ideal-6"></textarea></div>
+          <div class="field"><label>커리큘럼 특징</label><textarea id="uni-curri-6"></textarea></div>
+          <div class="field"><label>교수님 전공·특색 (대표 교수 2~3인)</label><textarea id="uni-prof-6"></textarea></div>
+          <div class="field" style="margin-bottom:0"><label>이 학과에 끌리는 이유</label><textarea id="uni-why-6"></textarea></div>
+        </div>
+
+      </section>
+
+      <!-- C. 예상 질문 & 답변 -->
+      <section class="panel">
+        <h2>3. 예상 질문 &amp; 답변 준비</h2>
+        <p class="hint">학생부·포트폴리오 활동을 바탕으로 예상 질문을 스스로 만들어보고, 답변은 키워드로만 적어두세요.</p>
+
+        <div id="qna-list"></div>
+
+        <button type="button" id="add-qna" class="btn btn-ghost btn-sm">+ 질문 추가</button>
+      </section>
+
+      <div class="submit-row">
+        <button type="submit" id="submit-btn" class="btn btn-primary">제출하기</button>
+      </div>
+
+    </form>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">관리자: 차윤정 (3학년 3반 담임)</div>
+</footer>
+
+<script src="../../assets/config.js"></script>
+<script src="../../assets/gate.js"></script>
+<script src="../../assets/app.js"></script>
+<script>
+  initStudentForm("14", "이소정");
+</script>
+</body>
+</html>
