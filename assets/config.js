@@ -12,29 +12,29 @@ const SITE_CONFIG = {
   // ⚠️ 이건 진짜 보안이 아니라 "가벼운 문단속"입니다 — 페이지 소스를
   // 볼 줄 아는 사람은 이 값을 그대로 볼 수 있어요. 검색엔진 노출을
   // 막고, 링크를 모르는 외부인이 우연히 들어오는 것을 막는 용도입니다.
-  sitePassword: "여기에_비밀번호를_정하세요",
+  sitePassword: "2633",
 
   // 관리자(admin) 페이지는 학생 전체의 응답이 그대로 보이는 곳이라
   // 위 학생용 비밀번호와는 "다른", 선생님만 아는 별도 비밀번호를 쓰세요.
-  adminPassword: "여기에_관리자_비밀번호를_따로_정하세요",
+  adminPassword: "2633admin",
 
   // ── ① 구글 폼 연결 정보 ─────────────────────────────────────
   // 아래 안내대로 구글 폼을 만든 뒤, formResponse 주소와 각 문항의
   // entry.XXXXXXXXX 값을 여기에 붙여넣으세요. (README.md 참고)
-  formActionUrl: "https://docs.google.com/forms/d/e/여기에_본인_폼_ID를_넣으세요/formResponse",
+  formActionUrl: "https://docs.google.com/forms/d/e/1FAIpQLSePX3W27_CvLioJvj_zAZxnUwrZEBTOd9XkxpHGAZsooCnH6g/formResponse",
 
   entry: {
-    classNo: "entry.000000001",       // 반
-    studentNo: "entry.000000002",     // 번호
-    name: "entry.000000003",          // 이름
-    concept: "entry.000000004",       // 나만의 컨셉 키워드
-    intro: "entry.000000005",         // 1분 자기소개 스크립트
-    motivationCommon: "entry.000000006", // 지원동기(공통)
-    careerPlan: "entry.000000007",    // 진로계획
-    whySpecialized: "entry.000000008",// 특성화고 선택 이유
-    interestTopic: "entry.000000009", // 관심 이슈·작가
-    universityResearch: "entry.000000010", // 지원 대학 조사 (6개 블록 취합)
-    qna: "entry.000000011",           // 예상 질문·답변 (취합)
+    classNo: "entry.520981666",       // 반
+    studentNo: "entry.58548689",      // 번호
+    name: "entry.549351344",          // 이름
+    concept: "entry.425819989",       // 나만의 컨셉 키워드
+    intro: "entry.1501743933",        // 1분 자기소개 스크립트
+    motivationCommon: "entry.2119801020", // 지원동기(공통)
+    careerPlan: "entry.346911685",    // 진로계획
+    whySpecialized: "entry.1760163716",// 특성화고 선택 이유
+    interestTopic: "entry.1791515769", // 관심 이슈·작가
+    universityResearch: "entry.610755099", // 지원 대학 조사 (6개 블록 취합)
+    qna: "entry.435927409",           // 예상 질문·답변 (취합)
   },
 
   // ── ② 관리자(담임) 응답 현황 보기 ───────────────────────────
@@ -43,7 +43,7 @@ const SITE_CONFIG = {
   // 아래에 붙여넣으면 admin/index.html에서 전체 응답을 한눈에 볼 수
   // 있습니다. 이 페이지는 학생 전체 응답이 그대로 보이므로 절대
   // 공개 링크로 학생들에게 공유하지 마세요. (README.md 주의사항 참고)
-  adminSheetEmbedUrl: "",
+  adminSheetEmbedUrl: "https://docs.google.com/spreadsheets/d/1UMtAFEm17kTDrZjtS1SmdtOkQUffviW_JKIEtgv-jWk/edit",
 
   // ── ③ 학생 명단 (3학년 3반, 번호순) ─────────────────────────
   students: [
