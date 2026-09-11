@@ -62,6 +62,51 @@
   .qc-counter { font-size: 14px; color: var(--text-secondary); font-weight: 600; min-width: 70px; }
   .qc-tools { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 26px; }
   .qc-hint { color: var(--text-secondary); font-size: 13.5px; margin-top: 18px; }
+
+  .qc-timer-box {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+  }
+  .qc-timer-title { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
+  .tm-ring-box { position: relative; width: min(160px, 45vw); height: min(160px, 45vw); margin: 0 auto 6px; }
+  .tm-ring-box svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .tm-ring-bg { fill: none; stroke: var(--border); stroke-width: 9; }
+  .tm-ring-fg {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 9;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.25s linear, stroke 0.25s ease;
+  }
+  .tm-ring-fg.tm-danger { stroke: #ff3b30; }
+  .tm-time {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(22px, 6vw, 28px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .tm-presets { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 16px 0 12px; }
+  .tm-preset {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    padding: 7px 13px;
+    border-radius: 980px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .tm-preset:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+  .tm-preset.tm-active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .tm-controls { display: flex; gap: 10px; justify-content: center; margin-top: 6px; }
+  .tm-status { margin-top: 12px; font-size: 13.5px; color: var(--text-secondary); min-height: 18px; }
+  .tm-status.tm-done { color: #ff3b30; font-weight: 700; }
 </style>
 </head>
 <body>
@@ -100,6 +145,30 @@
   </div>
 
   <p class="qc-hint">키보드 ← → 방향키로도 넘길 수 있어요. 실제 면접 문항은 대학마다 다르니, 이 카드는 연습용 참고 질문입니다.</p>
+
+  <div class="qc-timer-box">
+    <div class="qc-timer-title">⏱️ 답변 타이머</div>
+    <div class="tm-ring-box">
+      <svg viewBox="0 0 120 120">
+        <circle class="tm-ring-bg" cx="60" cy="60" r="52"></circle>
+        <circle class="tm-ring-fg" id="tm-ring" cx="60" cy="60" r="52"></circle>
+      </svg>
+      <div class="tm-time" id="tm-time">01:00</div>
+    </div>
+    <div class="tm-presets">
+      <button class="tm-preset" data-sec="30">30초</button>
+      <button class="tm-preset" data-sec="60">1분</button>
+      <button class="tm-preset" data-sec="120">2분</button>
+      <button class="tm-preset" data-sec="180">3분</button>
+    </div>
+    <div class="tm-controls">
+      <button class="btn btn-primary btn-sm" id="tm-start">시작</button>
+      <button class="btn btn-ghost btn-sm" id="tm-pause" disabled>일시정지</button>
+      <button class="btn btn-ghost btn-sm" id="tm-reset">초기화</button>
+    </div>
+    <div class="tm-status" id="tm-status">1분으로 설정되어 있어요.</div>
+    <p class="qc-hint" style="margin-top:10px;">더 다양한 시간 설정은 <a href="../timer/" style="color:var(--accent);font-weight:600;">면접 타이머 페이지</a>에서 할 수 있어요.</p>
+  </div>
 </main>
 
 <footer>
@@ -194,7 +263,118 @@
   });
 
   render(false);
+
+  /* ---------- 답변 타이머(카드 페이지 하단, 간단 버전) ---------- */
+  (function () {
+    const timeEl = document.getElementById("tm-time");
+    const ring = document.getElementById("tm-ring");
+    const statusEl = document.getElementById("tm-status");
+    const startBtn = document.getElementById("tm-start");
+    const pauseBtn = document.getElementById("tm-pause");
+    const resetBtn = document.getElementById("tm-reset");
+    const presetBtns = [...document.querySelectorAll(".tm-preset")];
+
+    const CIRC = 2 * Math.PI * 52;
+    ring.style.strokeDasharray = `${CIRC}`;
+    ring.style.strokeDashoffset = "0";
+
+    let totalSec = 60;
+    let remainSec = 60;
+    let timerId = null;
+    let running = false;
+
+    function fmt(s) {
+      const m = Math.floor(s / 60);
+      const ss = s % 60;
+      return `${String(m).padStart(2, "0")}:${String(ss).padStart(2, "0")}`;
+    }
+
+    function updateDisplay() {
+      timeEl.textContent = fmt(remainSec);
+      const frac = totalSec > 0 ? remainSec / totalSec : 0;
+      ring.style.strokeDashoffset = `${CIRC * (1 - frac)}`;
+      ring.classList.toggle("tm-danger", remainSec <= 10 && remainSec > 0);
+    }
+
+    function setTotal(sec, label) {
+      if (running) return;
+      totalSec = sec;
+      remainSec = sec;
+      statusEl.classList.remove("tm-done");
+      statusEl.textContent = label ? `${label}으로 설정되어 있어요.` : "설정되어 있어요.";
+      presetBtns.forEach((b) => b.classList.toggle("tm-active", Number(b.dataset.sec) === sec));
+      updateDisplay();
+    }
+
+    function beep() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        [0, 0.28, 0.56].forEach((delay) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.value = 880;
+          gain.gain.setValueAtTime(0.001, ctx.currentTime + delay);
+          gain.gain.exponentialRampToValueAtTime(0.35, ctx.currentTime + delay + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 0.22);
+          osc.connect(gain).connect(ctx.destination);
+          osc.start(ctx.currentTime + delay);
+          osc.stop(ctx.currentTime + delay + 0.25);
+        });
+      } catch (e) {}
+    }
+
+    function tick() {
+      remainSec -= 1;
+      if (remainSec <= 0) {
+        remainSec = 0;
+        updateDisplay();
+        stop();
+        statusEl.textContent = "⏰ 시간이 끝났어요!";
+        statusEl.classList.add("tm-done");
+        beep();
+        return;
+      }
+      updateDisplay();
+    }
+
+    function start() {
+      if (running) return;
+      if (remainSec <= 0) remainSec = totalSec;
+      running = true;
+      startBtn.disabled = true;
+      pauseBtn.disabled = false;
+      statusEl.classList.remove("tm-done");
+      statusEl.textContent = "진행 중이에요…";
+      timerId = setInterval(tick, 1000);
+    }
+
+    function stop() {
+      running = false;
+      clearInterval(timerId);
+      startBtn.disabled = false;
+      pauseBtn.disabled = true;
+    }
+
+    startBtn.addEventListener("click", start);
+    pauseBtn.addEventListener("click", () => {
+      stop();
+      statusEl.textContent = "일시정지했어요.";
+    });
+    resetBtn.addEventListener("click", () => {
+      stop();
+      remainSec = totalSec;
+      statusEl.classList.remove("tm-done");
+      statusEl.textContent = "초기화했어요.";
+      updateDisplay();
+    });
+
+    presetBtns.forEach((btn) => {
+      btn.addEventListener("click", () => setTotal(Number(btn.dataset.sec), btn.textContent));
+    });
+
+    setTotal(60, "1분");
+  })();
 </script>
 </body>
 </html>
-
