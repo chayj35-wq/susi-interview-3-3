@@ -110,6 +110,119 @@ function loadDraft(studentNo) {
   return true;
 }
 
+/* ---------- 나만의 면접문제 카드 (학생 개인 페이지) ---------- */
+function collectMyQuestions() {
+  const out = [];
+  document.querySelectorAll("#qna-list .qna-row").forEach((row) => {
+    const q = row.querySelector(".qna-q")?.value.trim() || "";
+    const a = row.querySelector(".qna-a")?.value.trim() || "";
+    if (q) out.push({ q, a });
+  });
+  return out;
+}
+
+let myqKeyHandler = null;
+
+function closeMyQuestionsModal() {
+  const overlay = document.getElementById("myq-overlay");
+  if (overlay) overlay.remove();
+  if (myqKeyHandler) {
+    document.removeEventListener("keydown", myqKeyHandler);
+    myqKeyHandler = null;
+  }
+}
+
+function openMyQuestionsModal() {
+  closeMyQuestionsModal();
+  const items = collectMyQuestions();
+  const overlay = document.createElement("div");
+  overlay.className = "myq-overlay";
+  overlay.id = "myq-overlay";
+
+  if (items.length === 0) {
+    overlay.innerHTML =
+      '<div class="myq-modal">' +
+      '<button type="button" class="myq-close" id="myq-close" aria-label="닫기">✕</button>' +
+      '<div class="myq-title">🎯 나만의 면접문제</div>' +
+      '<p class="myq-empty">아직 3번 "예상 질문 &amp; 답변 준비"에 입력한 질문이 없어요.<br>아래로 내려가 질문을 먼저 적어보세요.</p>' +
+      "</div>";
+    document.body.appendChild(overlay);
+    document.getElementById("myq-close").addEventListener("click", closeMyQuestionsModal);
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) closeMyQuestionsModal();
+    });
+    myqKeyHandler = (e) => {
+      if (e.key === "Escape") closeMyQuestionsModal();
+    };
+    document.addEventListener("keydown", myqKeyHandler);
+    return;
+  }
+
+  overlay.innerHTML =
+    '<div class="myq-modal">' +
+    '<button type="button" class="myq-close" id="myq-close" aria-label="닫기">✕</button>' +
+    '<div class="myq-title">🎯 나만의 면접문제</div>' +
+    '<p class="myq-sub">내가 3번에 적어둔 예상 질문을 카드로 연습해보세요.</p>' +
+    '<div class="myq-stage"><div class="myq-card" id="myq-card"></div></div>' +
+    '<div class="myq-nav">' +
+    '<button type="button" class="myq-arrow" id="myq-prev" aria-label="이전 질문">←</button>' +
+    '<span class="myq-counter" id="myq-counter">1 / ' + items.length + "</span>" +
+    '<button type="button" class="myq-arrow" id="myq-next" aria-label="다음 질문">→</button>' +
+    "</div>" +
+    '<button type="button" class="btn btn-ghost btn-sm" id="myq-toggle-answer" style="display:flex;margin:14px auto 0;">내 답변 메모 보기</button>' +
+    '<div class="myq-answer" id="myq-answer" hidden></div>' +
+    "</div>";
+  document.body.appendChild(overlay);
+
+  let pos = 0;
+  let showingAnswer = false;
+  const cardEl = document.getElementById("myq-card");
+  const counterEl = document.getElementById("myq-counter");
+  const prevBtn = document.getElementById("myq-prev");
+  const nextBtn = document.getElementById("myq-next");
+  const answerEl = document.getElementById("myq-answer");
+  const toggleBtn = document.getElementById("myq-toggle-answer");
+
+  function render() {
+    cardEl.textContent = items[pos].q;
+    counterEl.textContent = `${pos + 1} / ${items.length}`;
+    prevBtn.disabled = pos === 0;
+    nextBtn.disabled = pos === items.length - 1;
+    answerEl.textContent = items[pos].a || "(적어둔 답변 메모가 없어요)";
+    showingAnswer = false;
+    answerEl.hidden = true;
+    toggleBtn.textContent = "내 답변 메모 보기";
+  }
+
+  function go(delta) {
+    const next = pos + delta;
+    if (next < 0 || next >= items.length) return;
+    pos = next;
+    render();
+  }
+
+  prevBtn.addEventListener("click", () => go(-1));
+  nextBtn.addEventListener("click", () => go(1));
+  toggleBtn.addEventListener("click", () => {
+    showingAnswer = !showingAnswer;
+    answerEl.hidden = !showingAnswer;
+    toggleBtn.textContent = showingAnswer ? "답변 메모 숨기기" : "내 답변 메모 보기";
+  });
+  document.getElementById("myq-close").addEventListener("click", closeMyQuestionsModal);
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) closeMyQuestionsModal();
+  });
+
+  myqKeyHandler = (e) => {
+    if (e.key === "Escape") closeMyQuestionsModal();
+    if (e.key === "ArrowRight") go(1);
+    if (e.key === "ArrowLeft") go(-1);
+  };
+  document.addEventListener("keydown", myqKeyHandler);
+
+  render();
+}
+
 /* ---------- 학생 입력 폼 초기화 ---------- */
 function initStudentForm(studentNo, studentName) {
   const form = document.getElementById("student-form");
@@ -130,6 +243,21 @@ function initStudentForm(studentNo, studentName) {
   if (document.getElementById("qna-list") && document.getElementById("qna-list").children.length === 0) {
     addQnaRow();
     addQnaRow();
+  }
+
+  // "나만의 면접문제" 버튼 — 1번 섹션(자기소개 & 나만의 컨셉) 바로 위에 추가
+  if (!document.getElementById("myq-open-btn")) {
+    const firstPanel = form.querySelector(".panel");
+    if (firstPanel) {
+      const myqBtn = document.createElement("button");
+      myqBtn.type = "button";
+      myqBtn.id = "myq-open-btn";
+      myqBtn.className = "btn btn-ghost";
+      myqBtn.style.cssText = "display:flex;width:max-content;margin:0 auto 24px;";
+      myqBtn.textContent = "🎯 나만의 면접문제";
+      myqBtn.addEventListener("click", openMyQuestionsModal);
+      firstPanel.parentNode.insertBefore(myqBtn, firstPanel);
+    }
   }
 
   // "저장하기" 버튼을 "제출하기" 버튼 앞에 추가
