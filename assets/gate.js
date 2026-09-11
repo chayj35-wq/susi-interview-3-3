@@ -142,12 +142,14 @@
   }
 
   function fixFooterText() {
-    var OLD = "관리자: 차윤정 (3학년 3반 담임)";
-    var NEW = "페이지 제작 및 관리자 : 차윤정(3학년 3반 담임)";
+    var MARKER = "관리자: 차윤정 (3학년 3반 담임)";
+    var LINE1 = "페이지 관리자 : 차윤정(3-3담임)";
     document.querySelectorAll("footer .wrap").forEach(function (el) {
-      if (el.innerHTML.indexOf(OLD) !== -1) {
-        el.innerHTML = el.innerHTML.split(OLD).join(NEW);
-      }
+      var html = el.innerHTML;
+      var idx = html.indexOf(MARKER);
+      if (idx === -1) return;
+      var after = html.slice(idx + MARKER.length).replace(/^\s*·\s*/, "").trim();
+      el.innerHTML = html.slice(0, idx) + LINE1 + (after ? "<br>" + after : "");
     });
   }
 
