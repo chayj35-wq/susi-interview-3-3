@@ -47,6 +47,69 @@ function renumberQna() {
   });
 }
 
+/* ---------- 임시 저장(이 브라우저에만 저장, 제출과 별개) ---------- */
+function draftKey(studentNo) {
+  return `susi_draft_${studentNo}`;
+}
+
+function collectDraftData() {
+  const form = document.getElementById("student-form");
+  if (!form) return null;
+  const fields = {};
+  form.querySelectorAll("input[id], textarea[id]").forEach((el) => {
+    if (el.id.startsWith("f-") || el.id.startsWith("uni-")) {
+      fields[el.id] = el.value;
+    }
+  });
+  const qna = [];
+  document.querySelectorAll("#qna-list .qna-row").forEach((row) => {
+    qna.push({
+      q: row.querySelector(".qna-q")?.value || "",
+      a: row.querySelector(".qna-a")?.value || "",
+    });
+  });
+  return { fields, qna, savedAt: new Date().toISOString() };
+}
+
+function saveDraft(studentNo) {
+  const data = collectDraftData();
+  if (!data) return;
+  try {
+    localStorage.setItem(draftKey(studentNo), JSON.stringify(data));
+    showToast("💾 이 브라우저에 저장했어요. (다른 기기·브라우저에서는 안 보여요 — 최종 제출은 꼭 제출하기 버튼으로!)");
+  } catch (e) {
+    showToast("저장에 실패했어요. 브라우저 저장공간을 확인해주세요.");
+  }
+}
+
+function loadDraft(studentNo) {
+  let raw;
+  try {
+    raw = localStorage.getItem(draftKey(studentNo));
+  } catch (e) {
+    return false;
+  }
+  if (!raw) return false;
+  let data;
+  try {
+    data = JSON.parse(raw);
+  } catch (e) {
+    return false;
+  }
+  if (data.fields) {
+    Object.entries(data.fields).forEach(([id, value]) => {
+      const el = document.getElementById(id);
+      if (el) el.value = value;
+    });
+  }
+  if (Array.isArray(data.qna) && data.qna.length) {
+    const list = document.getElementById("qna-list");
+    if (list) list.innerHTML = "";
+    data.qna.forEach((item) => addQnaRow(item.q, item.a));
+  }
+  return true;
+}
+
 /* ---------- 학생 입력 폼 초기화 ---------- */
 function initStudentForm(studentNo, studentName) {
   const form = document.getElementById("student-form");
@@ -59,10 +122,30 @@ function initStudentForm(studentNo, studentName) {
   // 질문 추가 버튼
   const addBtn = document.getElementById("add-qna");
   if (addBtn) addBtn.addEventListener("click", () => addQnaRow());
-  // 기본 2줄 제공
+
+  // 이 브라우저에 저장된 내용이 있으면 불러오기
+  const hadDraft = loadDraft(studentNo);
+
+  // 불러온 내용이 없을 때만 기본 2줄 제공
   if (document.getElementById("qna-list") && document.getElementById("qna-list").children.length === 0) {
     addQnaRow();
     addQnaRow();
+  }
+
+  // "저장하기" 버튼을 "제출하기" 버튼 앞에 추가
+  const submitBtn = document.getElementById("submit-btn");
+  if (submitBtn && !document.getElementById("save-btn")) {
+    const saveBtn = document.createElement("button");
+    saveBtn.type = "button";
+    saveBtn.id = "save-btn";
+    saveBtn.className = "btn btn-ghost";
+    saveBtn.textContent = "저장하기";
+    saveBtn.addEventListener("click", () => saveDraft(studentNo));
+    submitBtn.parentNode.insertBefore(saveBtn, submitBtn);
+  }
+
+  if (hadDraft) {
+    showToast("이 브라우저에 저장해둔 내용을 불러왔어요.");
   }
 
   form.addEventListener("submit", (e) => {
